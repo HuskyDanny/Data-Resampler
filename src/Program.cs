@@ -11,14 +11,18 @@ namespace HashFunction
         private const int PERCENTAGE = 10;
 
         private const int HASHSEED = 121;
-        private const int SAMPLE_DATA_SIZE = 1000000;
+        private const int SAMPLE_DATA_SIZE = 10000000;
 
         private static void Main(string[] args)
         {
+            var watch = new System.Diagnostics.Stopwatch();
+
             List<string> tenantIds = new List<string> { "walmart", "pepsi", "costco" };
             List<int> tenantIdsRatio = new List<int> { 89, 10, 1 };
 
             Dictionary<string, int> tenantIdSelectedCounts = new Dictionary<string, int>();
+
+            watch.Start();
             foreach (var row in PrepareSampleData(tenantIds, tenantIdsRatio))
             {
                 string tenantId = row.Item1;
@@ -39,6 +43,7 @@ namespace HashFunction
                     }
                 }
             }
+            watch.Stop();
 
             int totalCount = 0;
             foreach (var key in tenantIdSelectedCounts.Keys)
@@ -49,6 +54,7 @@ namespace HashFunction
             }
 
             Console.WriteLine("totalTrueCount : {0}", totalCount);
+            Console.WriteLine($"Execution Time : {watch.ElapsedMilliseconds} ms");
         }
 
         private static List<Tuple<string, string>> PrepareSampleData(List<string> tenantIds, List<int> tenantIdsRatio)
