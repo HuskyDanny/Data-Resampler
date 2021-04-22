@@ -22,14 +22,14 @@ namespace HashFunction
 
             Dictionary<string, int> tenantIdSelectedCounts = new Dictionary<string, int>();
 
+            var hasher = SpookyHashV2Factory.Instance.Create(new SpookyHashConfig());
+            var dataResampler = new DataResampler(hasher, HASHCOUNT, HASHSEED, PERCENTAGE);
+
             watch.Start();
             foreach (var row in PrepareSampleData(tenantIds, tenantIdsRatio))
             {
                 string tenantId = row.Item1;
                 string assignmentId = row.Item2;
-
-                var hasher = SpookyHashV2Factory.Instance.Create(new SpookyHashConfig());
-                var dataResampler = new DataResampler(hasher, HASHCOUNT, HASHSEED, PERCENTAGE);
 
                 if (dataResampler.ShouldKeep(tenantId, assignmentId))
                 {
